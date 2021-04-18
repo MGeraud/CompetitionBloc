@@ -21,11 +21,11 @@ public class CompetitionblocApplication {
 		return args -> {
 			competitorRepository.deleteAll()
 					.subscribe(null,null, () -> {
-						Stream.of(new Competitor(UUID.randomUUID().toString(), "Adam", "Ondra", "Benjamin", Set.of(1,3,5,6,8,10)),
-								new Competitor(UUID.randomUUID().toString(), "Eve", "Lili", "Minime", Set.of(2,4,6,8,10)),
-								new Competitor(UUID.randomUUID().toString(), "Jackob", "Schubert", "Benjamin", Set.of(1,2,3,4,5)),
-								new Competitor(UUID.randomUUID().toString(), "Mickael", "Mawen", "Minime", Set.of(5,9,14)),
-								new Competitor(UUID.randomUUID().toString(), "Tomoa", "Narazaki", "Benjamin", Set.of(2,3,4,14,15))
+						Stream.of(new Competitor(UUID.randomUUID().toString(), "Adam", "Ondra", "Benjamin","M", Set.of(1,3,5,6,8,10)),
+								new Competitor(UUID.randomUUID().toString(), "Eve", "Lili", "Minime","F", Set.of(2,4,6,8,10)),
+								new Competitor(UUID.randomUUID().toString(), "Jackob", "Schubert", "Benjamin","M", Set.of(1,2,3,4,5)),
+								new Competitor(UUID.randomUUID().toString(), "Mickael", "Mawen", "Minime","M", Set.of(5,9,14)),
+								new Competitor(UUID.randomUUID().toString(), "Tomoa", "Narazaki", "Benjamin","M", Set.of(2,3,4,14,15))
 						)
 								.forEach(competitor -> {
 									competitorRepository.save(competitor)

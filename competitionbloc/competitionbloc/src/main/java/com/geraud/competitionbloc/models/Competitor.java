@@ -20,6 +20,7 @@ public class Competitor {
     private String id;
     private String firstname;
     private String lastname;
+    private String sexe;
     private String category;
     private Set<Integer> boulderSuccess;
 }
