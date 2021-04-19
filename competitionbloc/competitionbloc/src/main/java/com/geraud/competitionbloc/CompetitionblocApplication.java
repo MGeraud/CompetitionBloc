@@ -15,25 +15,27 @@ import java.util.stream.Stream;
 @SpringBootApplication
 public class CompetitionblocApplication {
 
-	@Bean
-	CommandLineRunner competitors(CompetitorRepository competitorRepository){
-
-		return args -> {
-			competitorRepository.deleteAll()
-					.subscribe(null,null, () -> {
-						Stream.of(new Competitor(UUID.randomUUID().toString(), "Adam", "Ondra", "Benjamin","M", Set.of(1,3,5,6,8,10)),
-								new Competitor(UUID.randomUUID().toString(), "Eve", "Lili", "Minime","F", Set.of(2,4,6,8,10)),
-								new Competitor(UUID.randomUUID().toString(), "Jackob", "Schubert", "Benjamin","M", Set.of(1,2,3,4,5)),
-								new Competitor(UUID.randomUUID().toString(), "Mickael", "Mawen", "Minime","M", Set.of(5,9,14)),
-								new Competitor(UUID.randomUUID().toString(), "Tomoa", "Narazaki", "Benjamin","M", Set.of(2,3,4,14,15))
-						)
-								.forEach(competitor -> {
-									competitorRepository.save(competitor)
-											.subscribe(System.out::println);
-								});
-					});
-		};
-	}
+//	@Bean
+//	CommandLineRunner competitors(CompetitorRepository competitorRepository){
+//
+//		return args -> {
+//
+//
+//			competitorRepository.deleteAll()
+//					.subscribe(null,null, () -> {
+//						Stream.of(new Competitor( "Adam", "Ondra", "Escapade", Set.of(1,3,5,6,8,10)),
+//								new Competitor( "Eve", "Lili", "Lavaur", Set.of(2,4,6,8,10)),
+//								new Competitor( "Jackob", "Schubert", "Bloc a Bloc", Set.of(1,2,3,4,5)),
+//								new Competitor( "Mickael", "Mawen", "Bloc a bloc", Set.of(5,9,14)),
+//								new Competitor( "Tomoa", "Narazaki", "Escapade", Set.of(2,3,4,14,15))
+//						)
+//								.forEach(competitor -> {
+//									competitorRepository.save(competitor)
+//											.subscribe(System.out::println);
+//								});
+//					});
+//		};
+//	}
 
 	public static void main(String[] args) {
 		SpringApplication.run(CompetitionblocApplication.class, args);
