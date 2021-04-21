@@ -19,4 +19,10 @@ public class Competitor {
     private String lastname;
     private String club;
     private Set<Integer> boulderSuccess;
+
+    public Competitor(String firstname, String lastname, String club) {
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.club = club;
+    }
 }
