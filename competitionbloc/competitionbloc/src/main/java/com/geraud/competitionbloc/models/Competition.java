@@ -20,4 +20,5 @@ public class Competition {
     private String id;
     private String competitionName;
     private String year;
+    private List<String> categories;
 }

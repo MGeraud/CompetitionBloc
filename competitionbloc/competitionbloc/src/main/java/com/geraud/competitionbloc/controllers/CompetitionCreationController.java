@@ -28,25 +28,36 @@ public class CompetitionCreationController {
         this.categoryRepository = categoryRepository;
     }
 
+    /**
+     * endpoint pour charger les différentes compétitions présente en base de donnée
+     * @return flux de toutes les compétitions présentes en base de données
+     */
     @GetMapping("/all")
     public Flux<Competition> getAllCompetitions(){
         return competitionRepository.findAll();
     }
 
+
+    /**
+     * Endpoint permetant la création d'une nouvelle compétition, il créé en même temps les catégories qui de celle-ci si précisées dans le formulaire
+     * @param competition : identification de la compétition (nom, année , catégories)
+     * @return statut http en fonction de la réussite ou non de l'enregistrement
+     */
     @PostMapping("/creation")
     public Mono<ResponseEntity<?>> createCompetition(@RequestBody  Competition competition) {
-        return this.competitionRepository.save(competition)
-                .map(competition1 -> ResponseEntity.created(URI.create("/competition/all")).build());
-    }
 
-    @PostMapping("/categories")
-    public Mono<ResponseEntity<?>> createCategories(@RequestBody List<Category> categories){
         try {
-            categories.forEach(c ->categoryRepository.save(c).subscribe());
-
-        }catch (Exception e){
+            competition.getCategories().forEach(
+                    category ->
+                            categoryRepository.save(new Category(category.toLowerCase(), competition.getCompetitionName() + " " + competition.getYear()))
+                    .subscribe()
+            );
+            competitionRepository.save(competition)
+            .subscribe();
+        } catch (Exception e) {
             return  Mono.just(ResponseEntity.status(HttpStatus.NOT_MODIFIED).build());
         }
         return Mono.just(ResponseEntity.status(201).build());
     }
+
 }

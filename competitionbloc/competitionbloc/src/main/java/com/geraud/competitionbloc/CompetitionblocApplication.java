@@ -20,6 +20,9 @@ public class CompetitionblocApplication {
 	CommandLineRunner competitors(CompetitionRepository competitionRepository , CategoryRepository categoryRepository){
 
 		return args -> {
+			List<String> categories = new ArrayList<>();
+			categories.add("Cadet Garcons");
+			categories.add("Benjamin Filles");
 			List<String> boulders = new ArrayList<>();
 			boulders.add("1");
 			boulders.add("3");
@@ -33,8 +36,8 @@ public class CompetitionblocApplication {
 			competitorListCadetGarcons.add(new Competitor( "Mickael", "Mawen", "Bloc a bloc", Set.of(5,9,14)));
 			competitorListCadetGarcons.add(new Competitor( "Tomoa", "Narazaki", "Escapade", Set.of(2,3,4,14,15)));
 
-			Competition compet = new Competition("Open2021" , "open" , "2021");
-			Competition fakeCompet = new Competition("Fakecompet" , "close" , "2021");
+			Competition compet = new Competition("Open2021" , "open" , "2021", categories );
+			Competition fakeCompet = new Competition("Fakecompet" , "close" , "2021", categories);
 
 			competitionRepository.deleteAll()
 					.subscribe(null , null , () -> {
@@ -47,8 +50,8 @@ public class CompetitionblocApplication {
 
 			categoryRepository.deleteAll()
 					.subscribe(null , null , () ->{
-						Stream.of(new Category( "1" , "Benjamin Fille" , competitorListBenjFille , boulders , scores , compet ),
-								new Category("2gdf" , "Cadet Garcons" , competitorListCadetGarcons , boulders ,scores ,compet))
+						Stream.of(new Category( "1" , "Benjamin Fille" , competitorListBenjFille , boulders , scores , compet.getCompetitionName()+ " " + compet.getYear() ),
+								new Category("2gdf" , "Cadet Garcons" , competitorListCadetGarcons , boulders ,scores ,compet.getCompetitionName()+ " " + compet.getYear()))
 								.forEach(category -> {
 									categoryRepository.save(category)
 											.subscribe(System.out::println);

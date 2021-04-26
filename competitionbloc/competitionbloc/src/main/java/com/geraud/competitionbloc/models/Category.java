@@ -24,7 +24,10 @@ public class Category {
     private List<Competitor> competitors;
     private List<String> boulders;
     private List<Map<String,Integer>> boulderScores;
+    private String competition;
 
-    private Competition competition;
-
+    public Category(String categoryName, String competition) {
+        this.categoryName = categoryName;
+        this.competition = competition;
+    }
 }
