@@ -39,12 +39,12 @@ public class CompetitionCreationController {
 
 
     /**
-     * Endpoint permetant la création d'une nouvelle compétition, il créé en même temps les catégories qui de celle-ci si précisées dans le formulaire
+     * Endpoint permetant la création d'une nouvelle compétition, il créé en même temps les catégories précisées dans le formulaire
      * @param competition : identification de la compétition (nom, année , catégories)
      * @return statut http en fonction de la réussite ou non de l'enregistrement
      */
     @PostMapping("/creation")
-    public Mono<ResponseEntity<?>> createCompetition(@RequestBody  Competition competition) {
+    public ResponseEntity<?> createCompetition(@RequestBody  Competition competition) {
 
         try {
             competition.getCategories().forEach(
@@ -55,9 +55,9 @@ public class CompetitionCreationController {
             competitionRepository.save(competition)
             .subscribe();
         } catch (Exception e) {
-            return  Mono.just(ResponseEntity.status(HttpStatus.NOT_MODIFIED).build());
+            return  ResponseEntity.status(HttpStatus.NOT_MODIFIED).build();
         }
-        return Mono.just(ResponseEntity.status(201).build());
+        return ResponseEntity.status(201).build();
     }
 
 }

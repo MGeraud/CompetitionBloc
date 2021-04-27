@@ -17,15 +17,11 @@ public class CustomCategoryRepositoryImpl implements CustomCategoryRepository{
         this.reactiveMongoTemplate = reactiveMongoTemplate;
     }
 
-    @Override
-    public Mono<Category> addNewCompetitor(String categoryId, Competitor competitor) {
-        //Todo query to add new competitor to the list of a given category
-        return null;
-    }
 
     @Override
     public Mono<Category> addNewBoulder(String categoryId, String newBoulder) {
         //Todo query to add new boulder to the list of a given category
+
         return null;
     }
 
