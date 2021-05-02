@@ -6,6 +6,10 @@ import com.geraud.competitionbloc.models.Competition;
 import com.geraud.competitionbloc.repositories.CategoryRepository;
 import com.geraud.competitionbloc.repositories.CompetitionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,10 +26,12 @@ public class CompetitionCreationController {
 
     CompetitionRepository competitionRepository;
     CategoryRepository categoryRepository;
+    ReactiveMongoTemplate reactiveMongoTemplate;
 
-    public CompetitionCreationController(CompetitionRepository competitionRepository, CategoryRepository categoryRepository) {
+    public CompetitionCreationController(CompetitionRepository competitionRepository, CategoryRepository categoryRepository,ReactiveMongoTemplate reactiveMongoTemplate) {
         this.competitionRepository = competitionRepository;
         this.categoryRepository = categoryRepository;
+        this.reactiveMongoTemplate=reactiveMongoTemplate;
     }
 
     /**
@@ -60,4 +66,19 @@ public class CompetitionCreationController {
         return ResponseEntity.status(201).build();
     }
 
+    @PostMapping("/add")
+    public ResponseEntity<?> addboulder (@RequestBody Category category) {
+        try {
+            category.getBoulders().forEach(nb ->{
+                    Update update = new Update();
+                    update.addToSet("boulders" , nb );
+                Criteria criteria = Criteria.where("_id").is(category.getId());
+                reactiveMongoTemplate.updateFirst(Query.query(criteria) , update , "categories").subscribe();
+            });
+
+        } catch (Exception e) {
+        return  ResponseEntity.status(HttpStatus.NOT_MODIFIED).build();
+    }
+        return ResponseEntity.status(201).build();
+    }
 }
