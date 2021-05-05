@@ -67,13 +67,8 @@ public class CompetitionCreationController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<?> addboulder (@RequestBody Category category) {
-        try {
-            categoryRepository.addNewBoulder(category);
-        } catch (Exception e) {
-        return  ResponseEntity.status(HttpStatus.NOT_MODIFIED).build();
-    }
-        return ResponseEntity.status(201).build();
+    public Mono<Category> addboulder (@RequestBody Category category) {
+        return categoryRepository.addNewBoulder(category);
     }
 
     @DeleteMapping("/delete")

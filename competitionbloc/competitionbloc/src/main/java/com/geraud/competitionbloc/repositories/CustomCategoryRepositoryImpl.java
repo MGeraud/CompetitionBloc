@@ -23,13 +23,10 @@ public class CustomCategoryRepositoryImpl implements CustomCategoryRepository{
 
 
     @Override
-    public void addNewBoulder(Category category) {
-            category.getBoulders().forEach(nb -> {
-                Update update = new Update();
-                update.addToSet("boulders", nb);
-                Criteria criteria = Criteria.where("_id").is(category.getId());
-                reactiveMongoTemplate.updateFirst(Query.query(criteria), update, "categories").subscribe();
-            });
+    public Mono<Category> addNewBoulder(Category category) {
+        Query query = new Query(Criteria.where("_id").is(category.getId()));
+        Update update = new Update().addToSet("boulders").each(category.getBoulders());
+        return reactiveMongoTemplate.findAndModify(query,update,Category.class);
     }
 
     @Override

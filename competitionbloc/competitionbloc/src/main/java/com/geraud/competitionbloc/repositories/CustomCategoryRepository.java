@@ -9,7 +9,7 @@ import java.util.Map;
 public interface CustomCategoryRepository {
 
 
-    void addNewBoulder(Category category);
+    Mono<Category> addNewBoulder(Category category);
     Mono<Category> deleteBoulder(Category category);
     Mono<Category> updateScore(String categoryId, Map<String, Integer> mapScore);
 
