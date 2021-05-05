@@ -2,8 +2,12 @@ package com.geraud.competitionbloc.repositories;
 
 import com.geraud.competitionbloc.models.Category;
 import com.geraud.competitionbloc.models.Competitor;
+import com.mongodb.BasicDBObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import reactor.core.publisher.Mono;
 
 import java.util.Map;
@@ -19,16 +23,22 @@ public class CustomCategoryRepositoryImpl implements CustomCategoryRepository{
 
 
     @Override
-    public Mono<Category> addNewBoulder(String categoryId, String newBoulder) {
-        //Todo query to add new boulder to the list of a given category
-
-        return null;
+    public void addNewBoulder(Category category) {
+            category.getBoulders().forEach(nb -> {
+                Update update = new Update();
+                update.addToSet("boulders", nb);
+                Criteria criteria = Criteria.where("_id").is(category.getId());
+                reactiveMongoTemplate.updateFirst(Query.query(criteria), update, "categories").subscribe();
+            });
     }
 
     @Override
-    public Mono<Category> deleteBoulder(String categoryId, String boulderToDelete) {
-        //Todo query to delete a boulder to the list of a given category
-        return null;
+    public Mono<Category> deleteBoulder(Category category) {
+
+        Query query = new Query(Criteria.where("_id").is(category.getId()));
+        Update update = new Update().pull("boulders" , category.getBoulders().get(0));
+
+        return reactiveMongoTemplate.findAndModify(query,update,Category.class);
     }
 
     @Override

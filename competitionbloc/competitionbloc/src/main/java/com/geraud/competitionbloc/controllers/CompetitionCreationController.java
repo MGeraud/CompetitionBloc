@@ -69,16 +69,15 @@ public class CompetitionCreationController {
     @PostMapping("/add")
     public ResponseEntity<?> addboulder (@RequestBody Category category) {
         try {
-            category.getBoulders().forEach(nb ->{
-                    Update update = new Update();
-                    update.addToSet("boulders" , nb );
-                Criteria criteria = Criteria.where("_id").is(category.getId());
-                reactiveMongoTemplate.updateFirst(Query.query(criteria) , update , "categories").subscribe();
-            });
-
+            categoryRepository.addNewBoulder(category);
         } catch (Exception e) {
         return  ResponseEntity.status(HttpStatus.NOT_MODIFIED).build();
     }
         return ResponseEntity.status(201).build();
+    }
+
+    @DeleteMapping("/delete")
+    public Mono<Category> deleteBoulder(@RequestBody Category category) {
+         return categoryRepository.deleteBoulder(category);
     }
 }

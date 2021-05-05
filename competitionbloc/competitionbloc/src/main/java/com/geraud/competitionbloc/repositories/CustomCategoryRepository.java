@@ -9,8 +9,8 @@ import java.util.Map;
 public interface CustomCategoryRepository {
 
 
-    Mono<Category> addNewBoulder(String categoryId , String newBoulder);
-    Mono<Category> deleteBoulder(String categoryId , String boulderToDelete);
+    void addNewBoulder(Category category);
+    Mono<Category> deleteBoulder(Category category);
     Mono<Category> updateScore(String categoryId, Map<String, Integer> mapScore);
 
 }
