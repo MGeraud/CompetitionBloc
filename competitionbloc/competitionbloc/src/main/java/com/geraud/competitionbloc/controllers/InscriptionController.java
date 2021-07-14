@@ -3,12 +3,14 @@ package com.geraud.competitionbloc.controllers;
 
 import com.geraud.competitionbloc.models.Category;
 import com.geraud.competitionbloc.repositories.CategoryRepository;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/categorie")
 public class InscriptionController {
 

@@ -20,6 +20,7 @@ import java.net.URI;
 import java.util.List;
 
 @RestController()
+@CrossOrigin
 @RequestMapping("/competition")
 public class CompetitionCreationController {
 
