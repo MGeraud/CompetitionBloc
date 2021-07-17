@@ -51,20 +51,15 @@ public class CompetitionCreationController {
      * @return statut http en fonction de la réussite ou non de l'enregistrement
      */
     @PostMapping("/creation")
-    public ResponseEntity<?> createCompetition(@RequestBody  Competition competition) {
+    @ResponseStatus(HttpStatus.CREATED)
+    public Mono<Competition> createCompetition(@RequestBody  Competition competition) {
 
-        try {
             competition.getCategories().forEach(
                     category ->
                             categoryRepository.save(new Category(category.toLowerCase(), competition.getCompetitionName() + " " + competition.getYear()))
                     .subscribe()
             );
-            competitionRepository.save(competition)
-            .subscribe();
-        } catch (Exception e) {
-            return  ResponseEntity.status(HttpStatus.NOT_MODIFIED).build();
-        }
-        return ResponseEntity.status(201).build();
+            return competitionRepository.save(competition);
     }
 
     @PostMapping("/add")
