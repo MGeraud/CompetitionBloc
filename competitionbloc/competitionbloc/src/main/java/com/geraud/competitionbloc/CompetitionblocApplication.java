@@ -27,7 +27,7 @@ public class CompetitionblocApplication {
 			boulders.add("1");
 			boulders.add("3");
 			boulders.add("3bis");
-			List<Map<String,Integer>> scores = new ArrayList<>();
+			Map<String,Integer> scores = new HashMap<>();
 			List<Competitor> competitorListBenjFille = new ArrayList<>();
 			List<Competitor> competitorListCadetGarcons = new ArrayList<>();
 			competitorListCadetGarcons.add(new Competitor( "Adam", "Ondra", "Escapade", Set.of(1,3,5,6,8,10)));
