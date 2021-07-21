@@ -23,7 +23,7 @@ public class Category {
     private String categoryName;
     private List<Competitor> competitors;
     private List<String> boulders;
-    private List<Map<String,Integer>> boulderScores;
+    private Map<String,Integer> boulderScores;
     private String competition;
 
     public Category(String categoryName, String competition) {

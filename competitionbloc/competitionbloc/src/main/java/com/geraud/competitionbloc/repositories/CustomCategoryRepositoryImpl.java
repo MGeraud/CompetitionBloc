@@ -1,8 +1,6 @@
 package com.geraud.competitionbloc.repositories;
 
 import com.geraud.competitionbloc.models.Category;
-import com.geraud.competitionbloc.models.Competitor;
-import com.mongodb.BasicDBObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -21,7 +19,6 @@ public class CustomCategoryRepositoryImpl implements CustomCategoryRepository{
         this.reactiveMongoTemplate = reactiveMongoTemplate;
     }
 
-
     @Override
     public Mono<Category> addNewBoulder(Category category) {
         Query query = new Query(Criteria.where("_id").is(category.getId()));
@@ -38,9 +35,18 @@ public class CustomCategoryRepositoryImpl implements CustomCategoryRepository{
         return reactiveMongoTemplate.findAndModify(query,update,Category.class);
     }
 
+
+
     @Override
     public Mono<Category> updateScore(String categoryId, Map<String, Integer> mapScore) {
         //Todo query to update the score list a given category
         return null;
+    }
+
+    @Override
+    public Mono<Category> addNewCompetitor(Category category) {
+        Query query = new Query(Criteria.where("_id").is(category.getId()));
+        Update update = new Update().addToSet("competitors").each(category.getCompetitors());
+        return reactiveMongoTemplate.findAndModify(query,update,Category.class);
     }
 }
