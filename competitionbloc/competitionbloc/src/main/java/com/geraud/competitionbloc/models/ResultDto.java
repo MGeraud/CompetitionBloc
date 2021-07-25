@@ -14,6 +14,7 @@ import java.util.Set;
 public class ResultDto {
 
     private String catId;
-    private String competitorName;
+    private String competitorFName;
+    private String competitorLName;
     private Set<String>  boulderDone;
 }
