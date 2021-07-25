@@ -30,11 +30,11 @@ public class CompetitionblocApplication {
 			Map<String,Integer> scores = new HashMap<>();
 			List<Competitor> competitorListBenjFille = new ArrayList<>();
 			List<Competitor> competitorListCadetGarcons = new ArrayList<>();
-			competitorListCadetGarcons.add(new Competitor( "Adam", "Ondra", "Escapade", Set.of(1,3,5,6,8,10)));
-			competitorListBenjFille.add(new Competitor( "Eve", "Lili", "Lavaur", Set.of(2,4,6,8,10)));
-			competitorListCadetGarcons.add(new Competitor( "Jackob", "Schubert", "Bloc a Bloc", Set.of(1,2,3,4,5)));
-			competitorListCadetGarcons.add(new Competitor( "Mickael", "Mawen", "Bloc a bloc", Set.of(5,9,14)));
-			competitorListCadetGarcons.add(new Competitor( "Tomoa", "Narazaki", "Escapade", Set.of(2,3,4,14,15)));
+			competitorListCadetGarcons.add(new Competitor( "Adam", "Ondra", "Escapade"));
+			competitorListBenjFille.add(new Competitor( "Eve", "Lili", "Lavaur"));
+			competitorListCadetGarcons.add(new Competitor( "Jackob", "Schubert", "Bloc a Bloc"));
+			competitorListCadetGarcons.add(new Competitor( "Mickael", "Mawen", "Bloc a bloc"));
+			competitorListCadetGarcons.add(new Competitor("Tomoa", "Narazaki", "Escapade"));
 
 			Competition compet = new Competition("Open2021" , "open" , "2021", categories );
 			Competition fakeCompet = new Competition("Fakecompet" , "close" , "2021", categories);

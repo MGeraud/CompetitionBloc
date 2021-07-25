@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-
 import java.util.Set;
 
 @Getter
@@ -14,15 +13,15 @@ import java.util.Set;
 @AllArgsConstructor
 public class Competitor {
 
-
     private String firstname;
     private String lastname;
     private String club;
-    private Set<Integer> boulderSuccess;
+    private Set<String> boulderSuccess;
 
     public Competitor(String firstname, String lastname, String club) {
         this.firstname = firstname;
         this.lastname = lastname;
         this.club = club;
     }
+
 }
