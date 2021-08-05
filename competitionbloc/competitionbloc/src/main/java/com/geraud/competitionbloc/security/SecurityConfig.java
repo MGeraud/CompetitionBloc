@@ -1,60 +1,65 @@
 package com.geraud.competitionbloc.security;
 
-import org.keycloak.adapters.KeycloakConfigResolver;
-import org.keycloak.adapters.springboot.KeycloakSpringBootConfigResolver;
-import org.keycloak.adapters.springsecurity.KeycloakConfiguration;
-import org.keycloak.adapters.springsecurity.authentication.KeycloakAuthenticationProvider;
-import org.keycloak.adapters.springsecurity.config.KeycloakWebSecurityConfigurerAdapter;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import net.minidev.json.JSONArray;
+import net.minidev.json.JSONObject;
 import org.springframework.context.annotation.Bean;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.core.authority.mapping.SimpleAuthorityMapper;
-import org.springframework.security.web.authentication.session.NullAuthenticatedSessionStrategy;
-import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
 
-@KeycloakConfiguration
-public class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
+import org.springframework.core.convert.converter.Converter;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AbstractAuthenticationToken;
+import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
+import org.springframework.security.config.web.server.ServerHttpSecurity;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
+import org.springframework.security.oauth2.server.resource.authentication.ReactiveJwtAuthenticationConverterAdapter;
+import org.springframework.security.web.server.SecurityWebFilterChain;
+import reactor.core.publisher.Mono;
 
-    @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        KeycloakAuthenticationProvider keycloakAuthenticationProvider = keycloakAuthenticationProvider();
-        //Utilisation de SimpleAuthorityMapper pour éviter le _ROLE de Spring Security
-        keycloakAuthenticationProvider.setGrantedAuthoritiesMapper(new SimpleAuthorityMapper());
-        auth.authenticationProvider(keycloakAuthenticationProvider);
-    }
+import java.util.Collection;
+import java.util.Map;
+import java.util.stream.Collectors;
 
-    /**
-     * définition de la strategie d'authenfication pour keycloak avec bearer only
-     * @return NullAuthenticatedSessionStrategy car bearer only
-     */
-    @Bean
-    @Override
-    protected SessionAuthenticationStrategy sessionAuthenticationStrategy() {
-        return new NullAuthenticatedSessionStrategy();
-    }
+@EnableWebFluxSecurity
+public class SecurityConfig {
 
     @Bean
-    public KeycloakConfigResolver keycloakConfigResolver(){
-        return new KeycloakSpringBootConfigResolver();
+    SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
+
+        http
+                .csrf().disable()
+                .httpBasic().disable()
+                .formLogin().disable()
+                .authorizeExchange()
+                .pathMatchers(HttpMethod.OPTIONS).permitAll()
+                .pathMatchers("/competition/*").hasAuthority("gestion")
+//                .pathMatchers("/admin").hasRole("ADMIN")
+                .anyExchange().denyAll()
+                .and()
+                .oauth2ResourceServer()
+                .jwt()
+                .jwtAuthenticationConverter(grantedAuthoritiesExtractor());
+
+        return http.build();
     }
 
-    /**
-     * filtres http en fonction des chemin et roles
-     * @param http
-     * @throws Exception
-     */
-    @Override
-    protected void configure(HttpSecurity http) throws Exception{
-        super.configure(http);
-        http.authorizeRequests()
-                .antMatchers("/competition*").hasRole("gestion")
-                .antMatchers("/categorie/all*").permitAll()
-                .antMatchers("/categorie/inscription*").permitAll()
-                .antMatchers("/juges*").hasAnyRole("gestion","juge")
-                .anyRequest().permitAll()
-                //mode API donc désactivation crsf
-                .and().csrf().disable();
+    private Converter<Jwt, Mono<AbstractAuthenticationToken>> grantedAuthoritiesExtractor() {
+        GrantedAuthoritiesExtractor extractor = new GrantedAuthoritiesExtractor();
+        return new ReactiveJwtAuthenticationConverterAdapter(extractor);
+    }
 
+    static class GrantedAuthoritiesExtractor extends JwtAuthenticationConverter {
+        @Override
+        protected Collection<GrantedAuthority> extractAuthorities(Jwt jwt) {
+            Map<String, Object> claims = jwt.getClaims();
+            JSONObject realmAccess = (JSONObject) claims.get("realm_access");
+            JSONArray roles = (JSONArray) realmAccess.get("roles");
+            return roles.stream()
+                    .map(Object::toString)
+                    .map(SimpleGrantedAuthority::new)
+                    .collect(Collectors.toSet());
+        }
     }
 }
