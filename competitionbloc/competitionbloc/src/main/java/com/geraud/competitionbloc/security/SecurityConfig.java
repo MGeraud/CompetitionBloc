@@ -25,6 +25,10 @@ import java.util.stream.Collectors;
 @EnableWebFluxSecurity
 public class SecurityConfig {
 
+
+    /**
+     * Bean créant la chain de filtres via spring sécurity avec les différents endpoints et le convertisseur de JWT car approche spring reactive
+     */
     @Bean
     SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
 
@@ -47,11 +51,18 @@ public class SecurityConfig {
         return http.build();
     }
 
+    /**
+     * convertisseur de jwt
+     * @return
+     */
     private Converter<Jwt, Mono<AbstractAuthenticationToken>> grantedAuthoritiesExtractor() {
         GrantedAuthoritiesExtractor extractor = new GrantedAuthoritiesExtractor();
         return new ReactiveJwtAuthenticationConverterAdapter(extractor);
     }
 
+    /**
+     * Extractions des différents paramètres d'authorisation du jwt
+     */
     static class GrantedAuthoritiesExtractor extends JwtAuthenticationConverter {
         @Override
         protected Collection<GrantedAuthority> extractAuthorities(Jwt jwt) {

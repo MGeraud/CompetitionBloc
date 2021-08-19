@@ -12,6 +12,7 @@ public class CompetitionServiceImpl implements CompetitionService{
     CompetitionRepository competitionRepository;
     CategoryService categoryService;
 
+
     public CompetitionServiceImpl(CompetitionRepository competitionRepository, CategoryService categoryService) {
         this.competitionRepository = competitionRepository;
         this.categoryService=categoryService;
@@ -22,6 +23,11 @@ public class CompetitionServiceImpl implements CompetitionService{
         return competitionRepository.findAll();
     }
 
+    /**
+     * Création de la compétition en BDD aisni que la création des différentes catégories de celle-ci
+     * @param competition à créer en BDD
+     * @return compétition créée
+     */
     @Override
     public Mono<Competition> saveCompetition(Competition competition) {
         categoryService.createCategories(competition);

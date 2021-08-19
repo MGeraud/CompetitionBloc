@@ -17,6 +17,10 @@ public class CategoryServiceImpl implements CategoryService{
         this.categoryRepository = categoryRepository;
     }
 
+    /**
+     * Création dynamique des différentes catégories en bdd à portir de la compétition
+     * @param competition
+     */
     @Override
     public void createCategories(Competition competition) {
          competition.getCategories().forEach(

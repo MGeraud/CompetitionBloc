@@ -6,6 +6,9 @@ import reactor.core.publisher.Mono;
 
 import java.util.Map;
 
+/**
+ * interface pour les requêtes personnalisées en réactive
+ */
 public interface CustomCategoryRepository {
 
 

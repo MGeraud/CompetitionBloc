@@ -18,6 +18,12 @@ public class JudgeController {
         this.categoryService = categoryService;
     }
 
+    /**
+     * Endpoint réservé aux juges afin de valider les blocs réussis par le compétiteur
+     * @param resultDto DTO contenant l'id de la catégorie à laquelle appartient le compétiteur, le nom et prénom de ce dernier
+     *                  ainsi aue le bloc réussi
+     * @return les datas de la catégorie du compétiteur
+     */
     @PostMapping("/validation")
     @ResponseStatus(HttpStatus.CREATED)
     public Mono<Category> validBoulder(@RequestBody ResultDto resultDto){

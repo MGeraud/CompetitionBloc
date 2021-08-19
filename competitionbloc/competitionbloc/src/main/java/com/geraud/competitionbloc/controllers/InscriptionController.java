@@ -18,11 +18,20 @@ public class InscriptionController {
         this.categoryService = categoryService;
     }
 
+    /**
+     * Endpoint renvoyant le flux des différentes catégories présentes en database
+     * @return la liste de toutes les catégories
+     */
     @GetMapping("/all")
     public Flux<Category> getallCategories(){
         return categoryService.listAllCategories();
     }
 
+    /**
+     * Endpoint permetant l'inscription d'un compétiteur à une catégorie
+     * @param category à laquelle doit être ajouté le compétiteur
+     * @return
+     */
     @PostMapping("/inscription")
     public Mono<Category> addCompetitor(@RequestBody Category category){
         return categoryService.addCompetitor(category);
