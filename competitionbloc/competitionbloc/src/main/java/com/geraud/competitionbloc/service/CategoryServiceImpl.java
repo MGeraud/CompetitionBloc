@@ -17,6 +17,7 @@ public class CategoryServiceImpl implements CategoryService{
         this.categoryRepository = categoryRepository;
     }
 
+    @Override
     public void createCategories(Competition competition) {
          competition.getCategories().forEach(
                 category ->

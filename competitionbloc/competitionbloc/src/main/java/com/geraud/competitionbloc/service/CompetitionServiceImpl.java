@@ -10,9 +10,11 @@ import reactor.core.publisher.Mono;
 public class CompetitionServiceImpl implements CompetitionService{
 
     CompetitionRepository competitionRepository;
+    CategoryService categoryService;
 
-    public CompetitionServiceImpl(CompetitionRepository competitionRepository) {
+    public CompetitionServiceImpl(CompetitionRepository competitionRepository, CategoryService categoryService) {
         this.competitionRepository = competitionRepository;
+        this.categoryService=categoryService;
     }
 
     @Override
@@ -22,6 +24,7 @@ public class CompetitionServiceImpl implements CompetitionService{
 
     @Override
     public Mono<Competition> saveCompetition(Competition competition) {
+        categoryService.createCategories(competition);
         return competitionRepository.save(competition);
     }
 }

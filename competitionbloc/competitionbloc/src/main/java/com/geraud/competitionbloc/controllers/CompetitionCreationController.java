@@ -18,13 +18,12 @@ import reactor.core.publisher.Mono;
 @RequestMapping("/competition")
 public class CompetitionCreationController {
 
-    ReactiveMongoTemplate reactiveMongoTemplate;
+
     CategoryService categoryService;
     CompetitionService competitionService;
 
-    public CompetitionCreationController(CompetitionService competitionService,  ReactiveMongoTemplate reactiveMongoTemplate, CategoryService categoryService) {
+    public CompetitionCreationController(CompetitionService competitionService,  CategoryService categoryService) {
         this.competitionService = competitionService;
-        this.reactiveMongoTemplate = reactiveMongoTemplate;
         this.categoryService = categoryService;
     }
 
@@ -47,7 +46,6 @@ public class CompetitionCreationController {
     @ResponseStatus(HttpStatus.CREATED)
     public Mono<Competition> createCompetition(@RequestBody  Competition competition) {
 
-            categoryService.createCategories(competition);
             return competitionService.saveCompetition(competition);
     }
 
