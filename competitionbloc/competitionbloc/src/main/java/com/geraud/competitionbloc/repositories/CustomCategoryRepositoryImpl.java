@@ -40,7 +40,7 @@ public class CustomCategoryRepositoryImpl implements CustomCategoryRepository{
 
     @Override
     public Mono<Category> updateScore(String categoryId, Map<String, Integer> mapScore) {
-        //Todo query to update the score list a given category
+        //Todo on next project :  query to update the score list a given category waiting for rules
         return null;
     }
 

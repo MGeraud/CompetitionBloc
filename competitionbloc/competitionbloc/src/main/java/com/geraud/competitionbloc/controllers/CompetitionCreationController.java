@@ -3,8 +3,8 @@ package com.geraud.competitionbloc.controllers;
 
 import com.geraud.competitionbloc.models.Category;
 import com.geraud.competitionbloc.models.Competition;
-import com.geraud.competitionbloc.repositories.CategoryRepository;
-import com.geraud.competitionbloc.repositories.CompetitionRepository;
+import com.geraud.competitionbloc.service.CategoryService;
+import com.geraud.competitionbloc.service.CompetitionService;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.http.HttpStatus;
 
@@ -18,15 +18,14 @@ import reactor.core.publisher.Mono;
 @RequestMapping("/competition")
 public class CompetitionCreationController {
 
-
-    CompetitionRepository competitionRepository;
-    CategoryRepository categoryRepository;
     ReactiveMongoTemplate reactiveMongoTemplate;
+    CategoryService categoryService;
+    CompetitionService competitionService;
 
-    public CompetitionCreationController(CompetitionRepository competitionRepository, CategoryRepository categoryRepository,ReactiveMongoTemplate reactiveMongoTemplate) {
-        this.competitionRepository = competitionRepository;
-        this.categoryRepository = categoryRepository;
-        this.reactiveMongoTemplate=reactiveMongoTemplate;
+    public CompetitionCreationController(CompetitionService competitionService,  ReactiveMongoTemplate reactiveMongoTemplate, CategoryService categoryService) {
+        this.competitionService = competitionService;
+        this.reactiveMongoTemplate = reactiveMongoTemplate;
+        this.categoryService = categoryService;
     }
 
     /**
@@ -35,7 +34,7 @@ public class CompetitionCreationController {
      */
     @GetMapping("/all")
     public Flux<Competition> getAllCompetitions(){
-        return competitionRepository.findAll();
+        return competitionService.listAll();
     }
 
 
@@ -48,22 +47,18 @@ public class CompetitionCreationController {
     @ResponseStatus(HttpStatus.CREATED)
     public Mono<Competition> createCompetition(@RequestBody  Competition competition) {
 
-            competition.getCategories().forEach(
-                    category ->
-                            categoryRepository.save(new Category(category.toLowerCase(), competition.getCompetitionName() + " " + competition.getYear()))
-                    .subscribe()
-            );
-            return competitionRepository.save(competition);
+            categoryService.createCategories(competition);
+            return competitionService.saveCompetition(competition);
     }
 
     @PostMapping("/add")
     @ResponseStatus(HttpStatus.CREATED)
     public Mono<Category> addboulder (@RequestBody Category category) {
-        return categoryRepository.addNewBoulder(category);
+        return categoryService.addBoulder(category);
     }
 
     @DeleteMapping("/delete")
     public Mono<Category> deleteBoulder(@RequestBody Category category) {
-         return categoryRepository.deleteBoulder(category);
+         return categoryService.deleteBoulder(category);
     }
 }

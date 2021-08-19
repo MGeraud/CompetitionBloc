@@ -2,7 +2,7 @@ package com.geraud.competitionbloc.controllers;
 
 
 import com.geraud.competitionbloc.models.Category;
-import com.geraud.competitionbloc.repositories.CategoryRepository;
+import com.geraud.competitionbloc.service.CategoryService;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -12,19 +12,19 @@ import reactor.core.publisher.Mono;
 @RequestMapping("/categorie")
 public class InscriptionController {
 
-    CategoryRepository categoryRepository;
+    CategoryService categoryService;
 
-    public InscriptionController(CategoryRepository categoryRepository) {
-        this.categoryRepository = categoryRepository;
+    public InscriptionController(CategoryService categoryService) {
+        this.categoryService = categoryService;
     }
 
     @GetMapping("/all")
     public Flux<Category> getallCategories(){
-        return categoryRepository.findAll();
+        return categoryService.listAllCategories();
     }
 
     @PostMapping("/inscription")
     public Mono<Category> addCompetitor(@RequestBody Category category){
-        return categoryRepository.addNewCompetitor(category);
+        return categoryService.addCompetitor(category);
     }
 }

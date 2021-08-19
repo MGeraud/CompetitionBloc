@@ -1,7 +1,6 @@
 package com.geraud.competitionbloc.repositories;
 
 import com.geraud.competitionbloc.models.Category;
-import com.geraud.competitionbloc.models.Competitor;
 import com.geraud.competitionbloc.models.ResultDto;
 import reactor.core.publisher.Mono;
 
